@@ -1,0 +1,10 @@
+# 学习爬虫文件夹
+tutorial
+
+
+# 数据文件
+*.json
+*.html
+*.xml
+
+__pycache__
