@@ -22,7 +22,7 @@ sensitive_words = ['圣光', '圣骑', '暗牧', '马赛克', '打码', '图P', 
                 '青少年模式', '付费模式',
                 '无性生殖', '无性繁殖', '有丝分裂']
 
-insensitive_words = ['克隆', '植物', '删除']
+insensitive_words = ['克隆', '植物', '删除', '删号', '删好友']
 
 area_words = ['僅限']
 
@@ -45,7 +45,7 @@ def customed_key(x):
         bangumi_episode_num = float(x['bangumi_episode_num'])
         return bangumi_episode_num * EPISODE_INT + x['appear_timestamp']
     except:
-        return MAX_INT
+        return MAX_INT + x['appear_timestamp']
 
 def convert(str):
     new_string = ""
@@ -66,16 +66,18 @@ if __name__ == "__main__":
     print("Welcome to add more sensitive words to this list...")
 
     bangumicomment_dirname = '/home/charlie/bilibilispider/danmu/data/comment/'
-    bangumiresult_filename = '/home/charlie/bilibilispider/danmu/data/result_suspect.txt'
+    bangumiresult_filename = '/home/charlie/bilibilispider/danmu/data/result_suspect.md'
     json_postfix = '.json'
 
-    results = PrettyTable()
-    results.field_names = ["Season", "Episode", "Time", "Confidence", "Danmu"]
-    results._min_width = {"Season" : 50, "Danmu" : 50}
-    results._max_width = {"Season" : 70, "Danmu" : 70}
+    # results = PrettyTable()
+    # results.field_names = ["Season", "Episode", "Time", "Confidence", "Danmu"]
+    # results._min_width = {"Season" : 50, "Danmu" : 50}
+    # results._max_width = {"Season" : 70, "Danmu" : 70}
 
-    results_without_text = PrettyTable()
-    results_without_text.field_names = ["Season", "Episode", "Time", "Confidence"]
+    # results_without_text = PrettyTable()
+    # results_without_text.field_names = ["Season", "Episode", "Time", "Confidence"]
+    
+    results = [["Season", "Episode", "Time", "Confidence", "Danmu"]]
 
     bangumi_seasons = os.listdir(bangumicomment_dirname)
     for bangumi_season in bangumi_seasons:
@@ -100,8 +102,9 @@ if __name__ == "__main__":
         
         for i in range(len(sensitive_danmu)):
             danmu = sensitive_danmu[i]
-            if danmu['bangumi_season'] != last_danmu['bangumi_season'] or danmu['bangumi_episode'] != last_danmu['bangumi_episode'] or danmu['appear_timestamp'] - last_danmu['appear_timestamp'] > 60:
-                results.add_row([danmu['bangumi_season'], danmu['bangumi_episode'], danmu['appear_time'], "TODO", danmu['text']])
+            if danmu['bangumi_season'] != last_danmu['bangumi_season'] or danmu['bangumi_episode'] != last_danmu['bangumi_episode'] or danmu['appear_timestamp'] - last_danmu['appear_timestamp'] > 120:
+                results.append([danmu['bangumi_season'], danmu['bangumi_episode'], danmu['appear_time'], "TODO", danmu['text']])
+                # results.add_row([danmu['bangumi_season'], danmu['bangumi_episode'], danmu['appear_time'], "TODO", danmu['text']])
             last_danmu = danmu
             
         # for danmu in sensitive_danmu:
@@ -114,5 +117,13 @@ if __name__ == "__main__":
             
 
     with open(bangumiresult_filename, 'w') as f:
-        print(results, file = f)
+        # print(results, file = f)
+        for i in range(len(results[0])):
+            f.write('| ' + str(results[0][i]) + ' ')
+        f.write('|\n| :------: | - | - | - | - |\n')
+        for i in range(1, len(results)):
+            for j in range(len(results[i])):
+                f.write('| ' + str(results[i][j]) + ' ')
+            f.write('|\n')
+            
             
