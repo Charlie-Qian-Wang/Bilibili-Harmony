@@ -1,6 +1,6 @@
 '''
 Author : charlie
-Version: 1.0
+Version: 1.03
 
 TODO:
 1. supplement more sensitive words
@@ -16,13 +16,13 @@ from bs4 import BeautifulSoup
 from prettytable import PrettyTable
 from texttable import Texttable
 
-sensitive_words = ['圣光', '圣骑', '暗牧', '马赛克', '打码', '图P', 'P图', '删', '画面裁剪', 
+sensitive_words = ['圣光', '圣骑', '暗牧', '马赛克', '打码', '图P', 'P图', '删减', '画面裁剪', '画面剪裁', 
                 '去去就来', '学成归来', '港澳', '一国两制',
                 '血是绿色', '血是黑色', '血是蓝色', '血是灰色', 
                 '青少年模式', '付费模式',
                 '无性生殖', '无性繁殖', '有丝分裂']
 
-insensitive_words = ['克隆', '植物', '删除', '删号', '删好友']
+insensitive_words = ['克隆', '植物', '官方', '画质']
 
 area_words = ['僅限']
 
