@@ -24,8 +24,8 @@ class BangumiCommentSpider(scrapy.Spider):
 
     def start_requests(self):
 
-        with open('/home/charlie/bilibilispider/verified_1.txt', 'r') as f:
-            PROXIES = f.readlines()
+#        with open('/home/charlie/bilibilispider/verified_1.txt', 'r') as f:
+#            PROXIES = f.readlines()
 
         files = os.listdir(self.bangumipage_dirname)
         for file in files:
@@ -39,8 +39,13 @@ class BangumiCommentSpider(scrapy.Spider):
                         
                         bangumi_danmu_path = os.path.join(self.bangumicomment_dirname, str(bangumi['mediaInfo']['ssId']), str(ep['title']) + self.json_postfix)
                         if os.path.exists(bangumi_danmu_path):
-                            self.log(f"Existing Path: {bangumi_danmu_path}")
-                            continue
+                            with open(bangumi_danmu_path, 'r') as f:
+                                last_danmu = json.load(fp = f)
+                            if last_danmu != None:
+                                if len(last_danmu) > 0:
+                                    continue
+
+                        self.log('Find emtpy danmu json! Retrying ...')
                         
                         url = self.comment_api + str(ep['cid']) + '.xml'
                         # proxy = 'http://' + random.choice(PROXIES).strip()
